@@ -1,0 +1,8 @@
+# Conexão com o PostgreSQL no container
+DATABASE_URL=postgres://postgres:senha123@auth-db:5432/auth_db?sslmode=disable
+
+# Porta do auth-service
+PORT=8001
+
+# Chave mestre para administração
+MASTER_KEY=admin-secreto-123
