@@ -1,0 +1,98 @@
+name: CI + Security + Docker Scan (No Push)
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  GO_VERSION: 1.22
+  IMAGE_NAME: auth-service
+
+jobs:
+
+  build-test-security:
+    name: Build + Test + Lint + Security
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: auth-service
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      # -----------------------------
+      # 1️⃣ BUILD & UNIT TEST
+      # -----------------------------
+      - name: Download dependencies
+        run: go mod tidy
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Run Unit Tests
+        run: go test -v ./...
+
+      # -----------------------------
+      # 2️⃣ LINTER
+      # -----------------------------
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          working-directory: auth-service
+          version: latest
+
+      # -----------------------------
+      # 3️⃣ SCA - Dependency Scan
+      # -----------------------------
+      - name: Run Trivy (SCA - Filesystem)
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          scan-type: 'fs'
+          scan-ref: './auth-service'
+          severity: 'CRITICAL'
+          exit-code: '1'
+
+      # -----------------------------
+      # 3️⃣ SAST - Code Scan
+      # -----------------------------
+      - name: Run gosec
+        uses: securego/gosec@master
+        with:
+          args: ./auth-service/...
+
+  docker:
+    name: Docker Build + Container Scan
+    runs-on: ubuntu-latest
+    needs: build-test-security
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # -----------------------------
+      # 4️⃣ Docker Build
+      # -----------------------------
+      - name: Build Docker Image
+        run: |
+          IMAGE_NAME=${{ env.IMAGE_NAME }}:${{ github.sha }}
+          docker build -t $IMAGE_NAME ./auth-service
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+
+      # -----------------------------
+      # Container Scan (Trivy)
+      # -----------------------------
+      - name: Scan Docker Image (Trivy)
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: ${{ env.IMAGE_NAME }}
+          severity: 'CRITICAL'
+          exit-code: '1'
