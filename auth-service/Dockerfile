@@ -19,7 +19,6 @@ WORKDIR /app
 
 # Copia o binário e o .env
 COPY --from=builder /app/auth-service .
-COPY .env .
 
 EXPOSE 8001
 
