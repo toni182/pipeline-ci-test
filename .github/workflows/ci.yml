@@ -1,0 +1,16 @@
+name: Simple CI
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: CI Success
+        run: echo "ci deu certo"
