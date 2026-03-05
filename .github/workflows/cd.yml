@@ -1,0 +1,14 @@
+name: Simple CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  cd:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: CD Success
+        run: echo "cd deu certo também patrão 👍"
