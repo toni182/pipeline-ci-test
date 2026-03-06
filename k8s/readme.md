@@ -1,8 +1,5 @@
 Kubernetes Manifests — Tech Challenge 3
-        ☸
-     ☸  │  ☸
-   ☸    │    ☸
-     ☸  │  ☸
+
         ☸
 
 Este diretório contém todos os manifestos Kubernetes responsáveis pelo deploy dos microsserviços da aplicação no cluster Amazon EKS.
