@@ -172,10 +172,15 @@ jobs:
           k8s/${{ env.SERVICE_NAME }}/deployment.yml
   
       - name: Commit and Push changes
-        run: |
+        run: |        
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-  
+      
+          # Adiciona o manifest alterado
           git add k8s/${{ env.SERVICE_NAME }}/deployment.yml
-          git commit -m "Update ${{ env.SERVICE_NAME }} image to $COMMIT_HASH"
-          git push https://<GITHUB_USERNAME>:${{ secrets.GITOPS_TOKEN }}@github.com/toni182/pipeline-ci-test.git
+      
+          # Cria o commit (se houver alterações)
+          git commit -m "Update ${{ env.SERVICE_NAME }} image to $COMMIT_HASH" || echo "No changes to commit"
+      
+          # Push usando seu PAT
+          git push https://toni182:${{ secrets.GITOPS_TOKEN }}@github.com/toni182/pipeline-ci-test.git
