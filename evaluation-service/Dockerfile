@@ -25,5 +25,3 @@ EXPOSE 8004
 
 # Comando padrão ao iniciar o container
 CMD ["./evaluation-service"]
-# Comando padrão ao iniciar o container
-CMD ["./auth-service"]
