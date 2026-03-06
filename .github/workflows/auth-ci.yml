@@ -1,19 +1,5 @@
-name: CI + Security + Docker Scan 
-
-on:
-  push:
-    branches: [ "main" ]
-    paths:
-      - 'auth-service/**'
-
-  pull_request:
-    branches: [ "main" ]
-    paths:
-      - 'auth-service/**'
-
 env:
-  GO_VERSION: 1.24
-  IMAGE_NAME: auth-service
+  SERVICE_NAME: auth-service
 
 jobs:
   build-test-security:
@@ -22,7 +8,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: auth-service
+        working-directory: ${{ env.SERVICE_NAME }}
 
     steps:
       - name: Checkout
@@ -51,7 +37,7 @@ jobs:
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v6
         with:
-          working-directory: auth-service
+          working-directory: ${{ env.SERVICE_NAME }}
           version: latest
 
       # -----------------------------
@@ -61,7 +47,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.24.0
         with:
           scan-type: 'fs'
-          scan-ref: './auth-service'
+          scan-ref: ./${{ env.SERVICE_NAME }}
           severity: 'CRITICAL'
           exit-code: '1'
 
@@ -71,7 +57,7 @@ jobs:
       - name: Run gosec
         uses: securego/gosec@master
         with:
-          args: ./auth-service/...
+          args: ./${{ env.SERVICE_NAME }}/...
 
 # ============================================================
 #                     DOCKER SECTION
@@ -85,6 +71,7 @@ jobs:
 #                \    \        __/
 #                 \____\______/
 # ============================================================
+
   docker:
     name: Docker Build + Container Scan
     runs-on: ubuntu-latest
@@ -93,15 +80,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-# ============================================================
-#                           ##         .
-#                     ## ## ##        ==
-#                  ## ## ## ## ##    ===
-#              /"""""""""""""""""\___/ ===
-#         ~~~ {~~ ~~~~ ~~~ ~~~~ ~~ ~ /  ===- ~~~
-#              \______ o          __/
-#                \    \        __/
-#                 \____\______/
+
 # ============================================================
 
       # -----------------------------
@@ -109,8 +88,8 @@ jobs:
       # -----------------------------
       - name: Build Docker Image
         run: |
-          IMAGE_NAME=${{ env.IMAGE_NAME }}:${{ github.sha }}
-          docker build -t $IMAGE_NAME ./auth-service
+          IMAGE_NAME=$SERVICE_NAME:${GITHUB_SHA}
+          docker build -t $IMAGE_NAME ./$SERVICE_NAME
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
 
       # -----------------------------
@@ -149,7 +128,7 @@ jobs:
           COMMIT_HASH=${GITHUB_SHA::7}
 
           ECR_REGISTRY=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
-          ECR_REPOSITORY=auth-service
+          ECR_REPOSITORY=$SERVICE_NAME
 
           aws ecr describe-repositories --repository-names $ECR_REPOSITORY --region $AWS_REGION \
           || aws ecr create-repository --repository-name $ECR_REPOSITORY --region $AWS_REGION
