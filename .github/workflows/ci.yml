@@ -143,10 +143,10 @@ jobs:
       - name: Tag and Push Image to ECR
         run: |
           COMMIT_HASH=${GITHUB_SHA::7}
-
+          
           ECR_REGISTRY=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
-          ECR_REPOSITORY=${{ env.IMAGE_NAME }}
-
-          docker tag ${{ env.IMAGE_NAME }}:$GITHUB_SHA $ECR_REGISTRY/$ECR_REPOSITORY:latest
-
+          ECR_REPOSITORY=auth-service
+          
+          docker tag $IMAGE_NAME $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
