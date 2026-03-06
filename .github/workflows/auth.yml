@@ -178,4 +178,4 @@ jobs:
   
           git add k8s/${{ env.SERVICE_NAME }}/deployment.yml
           git commit -m "Update ${{ env.SERVICE_NAME }} image to $COMMIT_HASH"
-          git push
+          git push https://<GITHUB_USERNAME>:${{ secrets.GITOPS_TOKEN }}@github.com/toni182/pipeline-ci-test.git
