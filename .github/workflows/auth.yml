@@ -33,7 +33,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: services/${{ env.SERVICE_NAME }}/go.mod
+          go-version-file: ${{ env.SERVICE_NAME }}/go.mod
 
       # -----------------------------
       # 1. BUILD & UNIT TEST
