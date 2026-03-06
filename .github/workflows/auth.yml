@@ -169,7 +169,7 @@ jobs:
           COMMIT_HASH=${GITHUB_SHA::7}
   
           sed -i "s|image: .*|image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ env.SERVICE_NAME }}:$COMMIT_HASH|" \
-          k8s/${{ env.SERVICE_NAME }}/deployment.yaml
+          k8s/${{ env.SERVICE_NAME }}/deployment.yml
   
       - name: Commit and Push changes
         run: |
