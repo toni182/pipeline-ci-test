@@ -1,0 +1,24 @@
+# Porta que este serviço irá rodar
+PORT=8004
+
+# URL do seu Redis local
+REDIS_URL=redis://redis:6379
+
+# URLs dos outros serviços
+FLAG_SERVICE_URL=http://flag-service:8002
+TARGETING_SERVICE_URL=http://targeting-service:8003
+
+#Chave de API
+SERVICE_API_KEY=tm_key_70efa13ab215fa7623138230702407a32f9cbb488e320cd3d20d6a1bb346b8ba
+
+# --- Configuração da AWS (Obrigatório para o desafio) ---
+# Cole a URL da fila SQS que você criou no console da AWS
+AWS_SQS_URL=https://sqs.us-east-1.amazonaws.com/730335328948/aws-evaluation-analytics
+
+# Região da sua fila SQS
+AWS_REGION=us-east-1
+
+# Acesso AWS
+AWS_ACCESS_KEY_ID=ASIA2UC3AXK2OHGBZBLI
+AWS_SECRET_ACCESS_KEY=5sjgc2fZmMpeT+epx51PMCkqULQxwbAB5/d/B2OZ
+AWS_SESSION_TOKEN=IQoJb3JpZ2luX2VjEOT//////////wEaCXVzLXdlc3QtMiJHMEUCIDDQnAYzCo3fonzuyWe4KDz7NW/p4iKZ2FN+AyWm0g3KAiEAz/drwZq/EXlPIuRem7tAvJjGpaFgGsr13Adxxu6uARoqtAIIrf//////////ARAAGgw3MzAzMzUzMjg5NDgiDFma3gbWqd+vQcZ/8yqIAlcbRK1P6sKhtzBFJkkV7vfCir1+Dy6rRLPbItnmah76nY6s7Qk6zEUhjNSwFC+BxLIl6Qx0VQFH4HFCRpHFBZzxE3qmZs7vg3WiZbVfsmJg9jUeFiHXFrAkSs/m3Rk4ElHBLkWF7sXhAvxVdLCVuO0q3j+ngzEAAdDjoBSY38cE1oYfYopiUWYqtrF9QOFVfC+uSxImbtjkAifOQKDPCJL3BW75asKK8Z68Hiea+GMdACM72ZGP9+bcD1ZcCn1PpE1F4tPnrA0iLuIAWkgkbBwjMKb0ZeeOp9WDKTje6TBTiNNfrclPDdt+6IcZiQ26zMa4pD6771I02uNgThx9p8BIqTFx8VQodzCP1NzJBjqdAbLtVTo6zv3vSidFm5OhMPHZChivBix8TCIGNpqASuIkvcRs4GAYqUT1JD08PeeJUxzovEYd2QzjSH5ri89gmG7+uCgkVKSTmvezHcLiNI5pxF/cyHXkUhYOABLRMYbQVzWAe/o1TFeCwXZZxUyIHLY6a1oMAhdPGR+ZtdKWrXD+Z9Fcg160mVntKrRheWooryWUGdVGFAa1jv3C4PE=
