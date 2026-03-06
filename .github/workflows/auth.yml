@@ -173,8 +173,8 @@ jobs:
   
       - name: Commit and Push changes
         run: |        
-          # git config user.name "github-actions"
-          # git config user.email "github-actions@github.com"
+          git config user.name "toni182"
+          git config user.email "ptoni47@yahoo.com"
       
           # Adiciona o manifest alterado
           git add k8s/${{ env.SERVICE_NAME }}/deployment.yml
