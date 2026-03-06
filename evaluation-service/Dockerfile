@@ -1,5 +1,5 @@
 # Etapa 1: Build do Go
-FROM golang:1.21-alpine AS builder
+FROM golang:1.24-alpine AS builder
 
 WORKDIR /app
 
@@ -19,9 +19,11 @@ WORKDIR /app
 
 # Copia o binário e o .env
 COPY --from=builder /app/evaluation-service .
-COPY .env .
+COPY env .
 
 EXPOSE 8004
 
 # Comando padrão ao iniciar o container
 CMD ["./evaluation-service"]
+# Comando padrão ao iniciar o container
+CMD ["./auth-service"]
