@@ -1,17 +1,18 @@
-name: CI + Security + Docker Scan (No Push)
+name: CI + Security + Docker Scan 
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
+  paths:
+    - 'auth-service/**'
+    
 env:
   GO_VERSION: 1.24
   IMAGE_NAME: auth-service
 
 jobs:
-
   build-test-security:
     name: Build + Test + Lint + Security
     runs-on: ubuntu-latest
