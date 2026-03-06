@@ -1,6 +1,6 @@
 module evaluation-service
 
-go 1.21
+go 1.24
 
 require (
 	github.com/aws/aws-sdk-go v1.51.10
@@ -17,3 +17,4 @@ require (
 	golang.org/x/net v0.21.0 // indirect
 	golang.org/x/sys v0.17.0 // indirect
 )
+
