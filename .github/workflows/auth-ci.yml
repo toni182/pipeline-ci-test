@@ -5,15 +5,13 @@ on:
     branches: [ "main" ]
     paths:
       - 'auth-service/**'
-    paths-ignore:
-      - 'auth-service/README.md'
+      - '!auth-service/README.md'
 
   pull_request:
     branches: [ "main" ]
     paths:
       - 'auth-service/**'
-    paths-ignore:
-      - 'auth-service/README.md'
+      - '!auth-service/README.md'
 
 env:
   SERVICE_NAME: auth-service
