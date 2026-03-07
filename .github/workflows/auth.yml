@@ -3,10 +3,6 @@ name: CI/CD for Auth Service
 on:
   workflow_dispatch:
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
 env:
   SERVICE_NAME: auth-service
   GITOPS_TOKEN: ${{ secrets.GITOPS_TOKEN }}
