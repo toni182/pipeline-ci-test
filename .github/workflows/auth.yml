@@ -1,17 +1,11 @@
-name: CI + Security + Docker Scan 
+name: CI/CD for Auth Service
 
 on:
-  push:
-    branches: [ "main" ]
-    paths:
-      - 'auth-service/**'
-      - '!auth-service/README.md'
+  workflow_dispatch:
 
-  pull_request:
-    branches: [ "main" ]
-    paths:
-      - 'auth-service/**'
-      - '!auth-service/README.md'
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
 env:
   SERVICE_NAME: auth-service
@@ -19,7 +13,7 @@ env:
 
 jobs:
   build-test-security:
-    name: Build + Test + Lint + Security
+    name: Build + Tests
     runs-on: ubuntu-latest
 
     defaults:
@@ -164,10 +158,12 @@ jobs:
         - name: Checkout repository
           uses: actions/checkout@v4
           with:
-            # Importante: buscar todo o histórico para evitar erros de push
             fetch-depth: 0
             token: ${{ secrets.GITOPS_TOKEN }}
-  
+
+        # -----------------------------
+        # 10. Update Image Tag on k8s
+        # -----------------------------
         - name: Update image tag
           run: |
             COMMIT_HASH=${GITHUB_SHA::7}
@@ -177,7 +173,10 @@ jobs:
             
             # Ajuste no SED para ser mais específico e não falhar silenciosamente
             sed -i "s|image: .*${{ env.SERVICE_NAME }}:.*|image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ env.SERVICE_NAME }}:$COMMIT_HASH|g" $FILE_PATH
-  
+
+        # -----------------------------
+        # 11. Commit for k8s Updates
+        # -----------------------------
         - name: Commit and Push changes
           run: |        
             git config user.name "github-actions[bot]"
@@ -185,11 +184,9 @@ jobs:
         
             git add k8s/${{ env.SERVICE_NAME }}/deployment.yml
             
-            # Só faz commit se houver mudança real
             if git diff --quiet && git diff --staged --quiet; then
               echo "No changes to commit"
             else
               git commit -m "Update ${{ env.SERVICE_NAME }} image to $COMMIT_HASH"
-              # Usando a própria action de checkout autenticada
               git push origin main
             fi
